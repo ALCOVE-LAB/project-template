@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true
+    "source.organizeImports": "explicit"
   },
   "vue.codeActions.enabled": true,
   "i18n-ally.localesPaths": ["src/locals"],

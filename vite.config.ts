@@ -5,6 +5,8 @@ import AutoImport from 'unplugin-auto-import/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import Pages from 'vite-plugin-pages';
+import Layouts from 'vite-plugin-vue-layouts';
+
 import { fileURLToPath, URL } from 'url';
 
 import { defineConfig } from 'vite';
@@ -18,6 +20,7 @@ export default defineConfig({
     svgLoader(),
     basicSsl(),
     unocss(),
+    Layouts(),
     Components({
       dirs: ['src/components'],
       extensions: ['vue'],
