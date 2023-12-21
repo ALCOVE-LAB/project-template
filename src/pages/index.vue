@@ -1,16 +1,9 @@
-<template>
-  index
-  <router-link :to="{ name: 'Home' }">Home</router-link>
-  {{ useRouter().currentRoute.value.meta.bgColor }}
-</template>
+<template>index</template>
 
-<script lang="ts" setup>
-  import { useRouter } from 'vue-router';
-</script>
+<script lang="ts" setup></script>
 
 <route lang="yaml">
 meta:
   layout: default
-  bgColor: yellow
 </route>
 

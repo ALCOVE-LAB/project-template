@@ -13,6 +13,7 @@ export default defineConfig({
     ['wh-full', 'w-full h-full'],
     ['flex-center', 'flex justify-center items-center'],
     ['flex-col', 'flex flex-col'],
+    ['flex-row', 'flex flex-row'],
     ['flex-col-center', 'flex flex-col justify-center items-center'],
     ['text-ellipsis', 'truncate'],
     ['text-standard', 'text-sm md:text-base'],
