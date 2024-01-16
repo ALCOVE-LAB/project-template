@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col gap-3 overflow-y-scroll p-4">
+  <div class="flex-col gap-3 p-4">
     <slot></slot>
   </div>
 </template>
