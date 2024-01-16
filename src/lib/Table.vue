@@ -73,9 +73,9 @@
               :index="index"
               :col="col"
               :record="data"
-              :value="toRaw(data[col.field])"
+              :value="toRaw(data?.[col.field])"
             >
-              {{ data[col.field] }}
+              {{ data?.[col.field] }}
             </slot>
           </td>
         </tr>
@@ -88,19 +88,108 @@
         </tr>
       </tbody>
     </table>
+
+    <Spiner class="mx-auto my-10" v-if="loading"></Spiner>
+
+    <div
+      class="flex gap-2 justify-center my-4 flex-wrap px-4"
+      v-if="pagination?.size && pagination?.total"
+    >
+      <span
+        class="pagination-item"
+        :class="{
+          active: page == n,
+        }"
+        v-for="n in totalPage"
+        :key="n"
+        @click="$emit('update:page', n)"
+        v-if="totalPage < 7"
+      >
+        {{ n }}
+      </span>
+
+      <template v-else>
+        <span
+          class="pagination-item"
+          :class="{
+            active: page == 1,
+          }"
+          @click="$emit('update:page', 1)"
+        >
+          1
+        </span>
+        <span
+          class="pagination-item"
+          :class="{
+            active: page == n,
+          }"
+          v-for="n in [2, 3, 4, 5]"
+          :key="n"
+          @click="$emit('update:page', n)"
+          v-if="page <= 4"
+        >
+          {{ n }}
+        </span>
+
+        <span class="min-w-8 aspect-1 flex-center" v-if="page > 4 && page <= totalPage - 4">
+          ...
+        </span>
+        <span
+          class="pagination-item"
+          :class="{
+            active: page == n,
+          }"
+          v-for="n in [page - 1, page, page + 1]"
+          :key="n"
+          @click="$emit('update:page', n)"
+          v-if="page > 4 && page <= totalPage - 4"
+        >
+          {{ n }}
+        </span>
+
+        <span class="min-w-8 aspect-1 flex-center">...</span>
+
+        <span
+          class="pagination-item"
+          :class="{
+            active: page == n,
+          }"
+          v-for="n in [totalPage - 4, totalPage - 3, totalPage - 2, totalPage - 1]"
+          :key="n"
+          @click="$emit('update:page', n)"
+          v-if="page > totalPage - 4"
+        >
+          {{ n }}
+        </span>
+
+        <span
+          class="pagination-item"
+          :class="{
+            active: page == totalPage,
+          }"
+          @click="$emit('update:page', totalPage)"
+        >
+          {{ totalPage }}
+        </span>
+      </template>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { Popover } from 'ant-design-vue';
   import { toRaw } from 'vue';
-  const props = defineProps(['datas', 'columns', 'rowClick']);
+  const props = defineProps(['datas', 'columns', 'rowClick', 'page', 'pagination', 'loading']);
 
   const tableData = ref<any[]>(props.datas);
+  const totalPage = computed(() => {
+    if (!props.pagination?.size || !props.pagination?.total) return 1;
+    return Math.ceil(props.pagination?.total / props.pagination?.size);
+  });
 
   const order = ref<any>({});
 
-  const dataBeforeSort = ref<any[]>([...tableData.value]);
+  const dataBeforeSort = ref<any[]>([...(tableData.value || [])]);
 
   const row = ref();
 
@@ -175,6 +264,14 @@
 
     td {
       @apply text-center py-5 px-2;
+    }
+  }
+
+  .pagination-item {
+    @apply min-w-8 aspect-1 flex-center border-1 border-solid border-accent/40 rounded-2 cursor-pointer hover:bg-accent/10 transition-all;
+
+    &.active {
+      @apply bg-accent/10;
     }
   }
 </style>
