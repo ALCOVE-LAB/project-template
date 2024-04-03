@@ -1,9 +1,9 @@
-import basicSsl from '@vitejs/plugin-basic-ssl';
 import vue from '@vitejs/plugin-vue';
 import unocss from 'unocss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
+import mkcert from 'vite-plugin-mkcert';
 import Pages from 'vite-plugin-pages';
 import Layouts from 'vite-plugin-vue-layouts';
 
@@ -18,7 +18,9 @@ export default defineConfig({
     vue(),
     Pages(),
     svgLoader(),
-    basicSsl(),
+    mkcert({
+      hosts: ['locahost', '127.0.0.1'],
+    }),
     unocss(),
     Layouts(),
     Components({
