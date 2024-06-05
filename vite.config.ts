@@ -49,7 +49,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 8000,
-    https: true,
   },
   resolve: {
     alias: [{ find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) }],
@@ -61,14 +60,6 @@ export default defineConfig({
         manualChunks: {
           pinia: ['pinia'],
           vue: ['vue', 'vue-router'],
-          '@fortawesome': [
-            '@fortawesome/fontawesome-svg-core',
-            '@fortawesome/free-brands-svg-icons',
-            '@fortawesome/free-regular-svg-icons',
-            '@fortawesome/free-solid-svg-icons',
-            '@fortawesome/vue-fontawesome',
-          ],
-          '@ant-design': ['ant-design-vue'],
           '@vueuse': ['@vueuse/core'],
           'lodash-es': ['lodash-es'],
         },

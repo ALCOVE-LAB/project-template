@@ -15,19 +15,7 @@
           >
             <span class="flex gap-2 w-full justify-center items-center">
               {{ col.label }}
-              <Popover v-if="col.labelInfo" placement="right">
-                <template #content>
-                  <span v-html="col.labelInfo" v-if="typeof col.labelInfo == 'string'"></span>
-                  <component
-                    :is="col.labelInfo"
-                    v-if="typeof col.labelInfo == 'object'"
-                  ></component>
-                </template>
-                <font-awesome-icon
-                  icon="fa-regular fa-question-circle"
-                  class="cursor-default"
-                ></font-awesome-icon>
-              </Popover>
+              <!-- TODO: popover -->
               <div
                 class="flex-col span gap-[2px] cursor-pointer"
                 v-if="col.sortable"
@@ -177,7 +165,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { Popover } from 'ant-design-vue';
   import { toRaw } from 'vue';
   const props = defineProps(['datas', 'columns', 'rowClick', 'page', 'pagination', 'loading']);
 

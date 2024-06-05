@@ -1,77 +1,59 @@
 <template>
-  <div
-    class="v-btn"
-    :disabled="loading || disabled"
+  <button
+    class="cursor-pointer bg-primary active:bg-primary/70 transition-all px-6 rounded-3 text-white w-full h-50px font-semibold relative overflow-hidden border-1 border-solid border-transparent"
     :class="{
-      loading,
-      frame,
-      disabled,
+      '!bg-[#7474801F] !text-text !border-transparent': secondary,
+      'cursor-wait': loading,
+      'grayscale cursor-not-allowed': disabled,
     }"
-    @click.stop="clickHandler"
+    @click="
+      (evt:any) => {
+        if (loading || disabled) {
+          evt.preventDefault();
+          evt.stopPropagation();
+        }else{
+          emits('click', evt);
+        }
+      }
+    "
   >
-    <font-awesome-icon
-      icon="fa-solid fa-spinner"
-      class="animate-spin"
-      v-if="loading"
-    ></font-awesome-icon>
-    <slot></slot>
-  </div>
+    <div
+      class="w-full h-full bg-gray/20 absolute z-1 top-0 left-0 flex-center pointer-event-none opacity-0 transition-all duration-400"
+      :class="{
+        'opacity-100': loading,
+      }"
+    >
+      <LoaderCircle :size="28" class="animate-spin" color="gray" />
+    </div>
+    <div
+      class="flex-center gap-6px transition-all"
+      :class="{
+        'opacity-0': loading,
+      }"
+    >
+      <div class="w-6 h-6 flex-center rounded-full bg-white p-1" v-if="icon">
+        <component :is="icon" color="#2151CC" :size="18"></component>
+      </div>
+      <slot></slot>
+    </div>
+  </button>
 </template>
 
 <script lang="ts" setup>
-  import ButtonSound from '@/assets/sounds/Button.mp3';
-  const audio = new Audio(ButtonSound);
-  audio.volume = 0.1;
+  import { LoaderCircle } from 'lucide-vue-next';
+  import { FunctionalComponent } from 'vue';
 
-  const props = defineProps({
-    disabled: Boolean,
-    loading: Boolean,
-    frame: Boolean,
-    silence: Boolean,
-  });
+  withDefaults(
+    defineProps<{
+      icon?: FunctionalComponent;
+      secondary?: boolean;
+      loading?: boolean;
+      disabled?: boolean;
+    }>(),
+    {},
+  );
   const emits = defineEmits(['click']);
-
-  const clickHandler = () => {
-    if (props.disabled || props.loading) return;
-    if (!props.silence) audio.play();
-    emits('click');
-  };
 </script>
 
-<style lang="less" scoped>
-  .v-btn {
-    @apply flex items-center justify-center gap-4;
-    @apply w-fit text-black cursor-pointer;
-    @apply p-4 py-2 transition-all;
-    @apply bg-white rounded-2 select-none;
-    font-size: initial;
-
-    box-shadow: 4px 4px 0 0 var(--primary);
-
-    &.frame {
-      box-shadow: 4px 4px 0 0 var(--secondary);
-
-      &:hover {
-        @apply bg-secondary text-white;
-        box-shadow: 0 0;
-      }
-    }
-
-    &:hover {
-      @apply lg:bg-primary lg:text-white lg:shadow-none;
-    }
-
-    &:active {
-      box-shadow: 0 0;
-      transform: translate(4px, 4px);
-    }
-
-    &.loading,
-    &.disabled {
-      @apply cursor-not-allowed;
-      box-shadow: 0 0;
-      filter: contrast(0.5);
-    }
-  }
-</style>
+<style lang="less" scoped></style>
 

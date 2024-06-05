@@ -7,21 +7,13 @@
         :value="option.value"
         @click="$emit('update:value', option.value)"
       ></RadioBox>
-      <Popover v-if="option.info" placement="right">
-        <template #content>
-          {{ option.info }}
-        </template>
-        <font-awesome-icon
-          icon="fa-regular fa-question-circle"
-          class="cursor-default"
-        ></font-awesome-icon>
-      </Popover>
+      <!-- TODO: popover -->
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { Popover } from 'ant-design-vue';
+  import RadioBox from './RadioBox.vue';
   defineProps(['options', 'value']);
 </script>
 

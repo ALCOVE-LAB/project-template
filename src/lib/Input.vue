@@ -1,140 +1,105 @@
 <template>
-  <div
-    class="v-input"
-    :class="{
-      disabled,
-    }"
-  >
-    <!-- suffix -->
-    <div class="prefix" v-if="prefix">
-      <slot name="prefix"></slot>
-    </div>
+  <div class="fz-input">
+    <!-- prefix icon -->
+    <component
+      v-if="prefixIcon"
+      :is="prefixIcon"
+      class="cursor-pointer"
+      color="#aaa"
+      @click="emits('click:prefixIcon')"
+    ></component>
+    <!-- prefix content -->
+    <span v-if="prefix">{{ prefix }}</span>
+    <!-- prefix slot -->
+    <slot name="prefix"></slot>
+
     <input
+      :type="type === 'number' ? 'text' : type"
+      v-model.trim="value"
+      @input="inputHandler"
       v-bind="$attrs"
-      :disabled="disabled"
-      :type="type"
-      :step="type == 'number' ? new BigNumber(1).shiftedBy(-1 * precision).toString() : undefined"
-      v-model="currentValue"
-      @input="inputHanlder"
-      @blur="blurHandler"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
     />
-    <!-- suffix -->
-    <div class="suffix" v-if="suffix">
-      <slot name="suffix">
-        {{ suffix }}
-      </slot>
-    </div>
+
+    <!-- suffix icon -->
+    <component
+      v-if="suffixIcon"
+      :is="suffixIcon"
+      class="cursor-pointer"
+      @click="emits('click:suffixIcon')"
+    ></component>
+    <!-- suffix content -->
+    <span v-if="suffix">{{ suffix }}</span>
+    <!-- suffix slot -->
+    <slot name="suffix"></slot>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import BigNumber from 'bignumber.js';
-  BigNumber.config({ EXPONENTIAL_AT: 1e9 });
+  import { NumericConstraint } from '@/helpers/InputHelper';
+  import { FunctionalComponent } from 'vue';
 
-  const props = defineProps([
-    'modelValue',
-    'prefix',
-    'suffix',
-    'precision',
-    'type',
-    'min',
-    'max',
-    'disabled',
-    'uppercase',
-    'lowercase',
-  ]);
-  const emits = defineEmits(['update:modelValue']);
-  const currentValue = ref('');
+  const props = withDefaults(
+    defineProps<{
+      modelValue: string | number;
+      type: 'text' | 'number' | 'password' | 'email' | 'tel' | 'url';
+      // Optional Props
+      prefixIcon?: FunctionalComponent;
+      suffixIcon?: FunctionalComponent;
+      prefix?: string;
+      suffix?: string;
+      //   for type === 'number'
+      decimals?: number;
+      min?: number;
+      max?: number;
+    }>(),
+    {},
+  );
 
-  const inputHanlder = (evt: any) => {
-    let value = evt.target.value;
+  const emits = defineEmits<{
+    input: [value: string | number];
+    'update:modelValue': [value: string | number];
+    'click:prefixIcon': [];
+    'click:suffixIcon': [];
+  }>();
 
-    if (props.uppercase) {
-      value = value.toUpperCase();
-    } else if (props.lowercase) {
-      value = value.toLowerCase();
+  const value = ref<any>(props.modelValue);
+  const inputHandler = (event: Event) => {
+    let inputValue = (event.target as HTMLInputElement).value;
+    switch (props.type) {
+      case 'number':
+        // why should add '' here?
+        value.value =
+          NumericConstraint(inputValue, {
+            decimals: props.decimals,
+            min: props.min,
+            max: props.max,
+          }) + '';
+        break;
+      default:
+        value.value = inputValue;
     }
-
-    if (value != currentValue.value) {
-      currentValue.value = value?.toString();
-    }
-
-    emits('update:modelValue', value);
-  };
-
-  const blurHandler = (evt: any) => {
-    let value = evt.target.value;
-
-    if (props.type == 'number') {
-      if (!value || isNaN(value)) {
-        value = '';
-      } else if (!isNaN(props.precision)) {
-        value = new BigNumber(new BigNumber(value).shiftedBy(props.precision).toFixed(0))
-          .shiftedBy(-props.precision)
-          .toString();
-      }
-    }
-
-    if (props.min && BigNumber(value).isLessThan(props.min)) {
-      value = new BigNumber(props.min).toString();
-    }
-
-    if (props.max && BigNumber(value).isGreaterThan(props.max)) {
-      value = new BigNumber(props.max).toString();
-    }
-    currentValue.value = value;
-    emits('update:modelValue', value);
+    emits('update:modelValue', value.value);
   };
 
   watch(
     () => props.modelValue,
     () => {
-      currentValue.value = props.modelValue;
-    },
-    {
-      immediate: true,
+      value.value = props.modelValue;
     },
   );
 </script>
 
 <style lang="less" scoped>
-  .v-input {
-    @apply rounded-3 transition-all flex items-center overflow-hidden;
-    @apply bg-accent/10 border-transparent border-2 p-2 px-3;
+  .fz-input {
+    @apply bg-white px-4 py-10px;
+    @apply rounded-3 flex items-center gap-1;
 
-    &:focus-within {
-      @apply border-accent;
+    input {
+      @apply bg-transparent w-full;
     }
-
-    &.disabled > * {
-      @apply !cursor-not-allowed pointer-event-none;
-      filter: contrast(0);
-    }
-  }
-
-  input {
-    @apply bg-transparent w-full;
-  }
-
-  .prefix,
-  .suffix {
-    @apply h-full px-1 flex-shrink-0;
-  }
-
-  .suffix {
-    @apply ml-auto;
-  }
-
-  /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  /* Firefox */
-  input[type='number'] {
-    -moz-appearance: textfield;
   }
 </style>
 

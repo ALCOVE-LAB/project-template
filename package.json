@@ -1,5 +1,5 @@
 {
-  "name": "mxx-video",
+  "name": "",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,18 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "6.5.2",
-    "@fortawesome/free-brands-svg-icons": "6.5.2",
-    "@fortawesome/free-regular-svg-icons": "6.5.2",
-    "@fortawesome/free-solid-svg-icons": "6.5.2",
-    "@fortawesome/vue-fontawesome": "3.0.6",
+    "@aptos-labs/ts-sdk": "^1.18.0",
     "@unocss/reset": "0.60.0",
     "@vueuse/core": "10.9.0",
-    "ant-design-vue": "4.2.1",
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",
+    "bs58": "^5.0.0",
     "dayjs": "^1.11.11",
     "lodash-es": "4.17.21",
+    "lucide-vue-next": "^0.381.0",
+    "numeral": "^2.0.6",
     "pinia": "2.1.7",
     "unocss": "0.60.0",
     "vue": "^3.4.27",
@@ -32,11 +30,12 @@
     "@types/numeral": "^2.0.5",
     "@unocss/preset-attributify": "0.60.0",
     "@unocss/preset-uno": "0.60.0",
+    "@unocss/preset-web-fonts": "^0.60.4",
     "@unocss/preset-wind": "0.60.0",
     "@unocss/transformer-directives": "0.60.0",
+    "@unocss/transformer-variant-group": "^0.60.4",
     "@vitejs/plugin-basic-ssl": "1.1.0",
     "@vitejs/plugin-vue": "^5.0.4",
-    "@walletconnect/types": "^2.13.0",
     "less": "4.2.0",
     "typescript": "^5.4.5",
     "unplugin-auto-import": "^0.17.5",
@@ -47,7 +46,7 @@
     "vite-plugin-style-import": "^2.0.0",
     "vite-plugin-vue-layouts": "^0.11.0",
     "vite-svg-loader": "5.1.0",
-    "vue-masonry-css": "^1.0.3",
     "vue-tsc": "^2.0.16"
   }
 }
+
