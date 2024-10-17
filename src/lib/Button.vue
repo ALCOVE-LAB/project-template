@@ -1,10 +1,23 @@
 <template>
   <button
-    class="cursor-pointer bg-primary active:bg-primary/70 transition-all px-6 rounded-3 text-white w-full h-50px font-semibold relative overflow-hidden border-1 border-solid border-transparent"
+    class="btn"
     :class="{
-      '!bg-[#7474801F] !text-text !border-transparent': secondary,
-      'cursor-wait': loading,
-      'grayscale cursor-not-allowed': disabled,
+      'btn-secondary': secondary,
+      'btn-inverted': inverted,
+      'btn-info': info,
+      'btn-warning': warning,
+      'btn-success': success,
+      'btn-error': error,
+
+      'btn-outline': outline,
+      'btn-round': rounded,
+
+      'btn-xs': size === 'xs',
+      'btn-sm': size === 'sm',
+      'btn-lg': size === 'lg',
+
+      'btn-loading': loading,
+      'btn-disabled': disabled,
     }"
     @click="
       (evt:any) => {
@@ -22,19 +35,20 @@
       :class="{
         'opacity-100': loading,
       }"
+      v-if="loading"
     >
-      <LoaderCircle :size="28" class="animate-spin" color="gray" />
+      <LoaderCircle :size="24" class="animate-spin" color="white" />
     </div>
     <div
-      class="flex-center gap-6px transition-all"
+      class="flex-center gap-2 transition-all"
       :class="{
         'opacity-0': loading,
+        '!flex-col-center py-3': iconVertical,
       }"
     >
-      <div class="w-6 h-6 flex-center rounded-full bg-white p-1" v-if="icon">
-        <component :is="icon" color="#2151CC" :size="18"></component>
-      </div>
+      <component :is="prefixIcon" :size="prefixIconSize" v-if="prefixIcon"></component>
       <slot></slot>
+      <component :is="suffixIcon" :size="suffixIconSize" v-if="suffixIcon"></component>
     </div>
   </button>
 </template>
@@ -45,15 +59,141 @@
 
   withDefaults(
     defineProps<{
-      icon?: FunctionalComponent;
+      prefixIcon?: FunctionalComponent;
+      prefixIconSize?: number;
+      suffixIcon?: FunctionalComponent;
+      suffixIconSize?: number;
       secondary?: boolean;
+      inverted?: boolean;
+      outline?: boolean;
+
+      info?: boolean;
+      warning?: boolean;
+      success?: boolean;
+      error?: boolean;
+      rounded?: boolean;
+
       loading?: boolean;
       disabled?: boolean;
+      size?: 'xs' | 'sm' | 'md' | 'lg';
+      iconVertical?: boolean;
     }>(),
-    {},
+    {
+      size: 'md',
+      iconVertical: false,
+      prefixIconSize: 18,
+      suffixIconSize: 18,
+    },
   );
   const emits = defineEmits(['click']);
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .btn-outline-base {
+    @apply bg-transparent;
+    border-color: currentColor;
+  }
+
+  .btn {
+    @apply cursor-pointer bg-primary hover:opacity-90 transition-all;
+    @apply rounded-2 text-white font-semibold relative;
+    @apply overflow-hidden border-1 border-solid border-transparent;
+    @apply px-4 text-base min-h-10;
+    @apply active:scale-95;
+
+    &.btn-outline {
+      @apply text-primary;
+      .btn-outline-base;
+    }
+  }
+
+  .btn-secondary {
+    @apply bg-secondary border-transparent;
+
+    &.btn-outline {
+      @apply text-secondary;
+      .btn-outline-base;
+    }
+  }
+
+  .btn-inverted {
+    @apply bg-inverted border-transparent;
+
+    &.btn-outline {
+      .btn-outline-base;
+      @apply text-inverted;
+    }
+  }
+
+  // status
+  .btn-warning {
+    @apply bg-warning border-transparent;
+
+    &.btn-outline {
+      .btn-outline-base;
+      @apply text-warning;
+    }
+  }
+
+  .btn-info {
+    @apply bg-info border-transparent;
+
+    &.btn-outline {
+      .btn-outline-base;
+      @apply text-info;
+    }
+  }
+
+  .btn-success {
+    @apply bg-success border-transparent;
+
+    &.btn-outline {
+      .btn-outline-base;
+      @apply text-success;
+    }
+  }
+
+  .btn-error {
+    @apply bg-error border-transparent;
+
+    &.btn-outline {
+      .btn-outline-base;
+      @apply text-error;
+    }
+  }
+
+  // size
+  .btn-xs {
+    @apply px-2 text-xs min-h-6;
+  }
+
+  .btn-sm {
+    @apply px-3 text-sm min-h-8;
+  }
+
+  .btn-lg {
+    @apply px-6 text-lg min-h-12;
+  }
+
+  .btn,
+  .btn-lg,
+  .btn-sm,
+  .btn-xs {
+    @apply !leading-[1];
+  }
+
+  .btn-round {
+    @apply rounded-full aspect-1 p-0;
+  }
+
+  .btn-loading {
+    @apply cursor-wait;
+    @apply active:scale-100;
+  }
+
+  .btn-disabled {
+    @apply grayscale cursor-not-allowed;
+    @apply active:scale-100;
+  }
+</style>
 

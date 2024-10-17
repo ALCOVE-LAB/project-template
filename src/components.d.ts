@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('@/lib/Button.vue')['default']
+    Card: typeof import('@/lib/Card.vue')['default']
     Dialog: typeof import('./components/Dialog/index.vue')['default']
     Form: typeof import('@/lib/Form.vue')['default']
     FormItem: typeof import('@/lib/FormItem.vue')['default']

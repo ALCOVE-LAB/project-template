@@ -34,8 +34,29 @@ export default defineConfig({
     ['text-standard', 'text-sm md:text-base'],
     ['text-standard-small', 'text-xs md:text-sm'],
     ['text-standard-big', 'text-base md:text-5'],
+    ['text-base-normal', 'text-base leading-normal'],
+    ['text-lg-relaxed', 'text-lg leading-relaxed'],
+    ['text-xl-loose', 'text-xl leading-loose'],
   ],
-  rules: [],
-  theme: {},
+  rules: [
+    ['leading-none', { 'line-height': '1' }],
+    ['leading-tight', { 'line-height': '1.25' }],
+    ['leading-snug', { 'line-height': '1.375' }],
+    ['leading-normal', { 'line-height': '1.5' }],
+    ['leading-relaxed', { 'line-height': '1.625' }],
+    ['leading-loose', { 'line-height': '2' }],
+  ],
+  theme: {
+    colors: {
+      primary: 'var(--primary-color)',
+      secondary: 'var(--secondary-color)',
+      inverted: 'var(--inverted-color)',
+
+      success: 'var(--success-color)',
+      warning: 'var(--warning-color)',
+      error: 'var(--error-color)',
+      info: 'var(--info-color)',
+    },
+  },
 });
 
