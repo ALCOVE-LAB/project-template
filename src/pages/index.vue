@@ -1,4 +1,9 @@
 <template>
+  <div class="sticky top-0 left-0 bg-white/30 shadow-sm backdrop-blur py-10 px-4 z-10">
+    <div class="flex mx-auto w-ful max-w-1440px">
+      <router-link to="/components">Components</router-link>
+    </div>
+  </div>
   <div class="flex-col items-center gap-10 pb-20">
     <div class="text-10 py-10 flex-col-axis-center gap-8">
       <span
