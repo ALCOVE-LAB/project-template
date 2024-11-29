@@ -17,6 +17,15 @@ export interface TequilaToastProps {
 let TequilaAppInstance: App | null = null;
 let toastsState = reactive<{ toasts: TequilaToastProps[] }>({ toasts: [] });
 
+const mergeWithDefaults = (props: Omit<TequilaToastProps, 'id'>) => {
+  return {
+    ...props,
+    type: props.type || 'default',
+    closeIcon: props.closeIcon ?? true,
+    duration: props.duration ?? 3000,
+  };
+};
+
 const initializeToast = () => {
   let layout = document.querySelector(`#${ToastLayoutID}`);
   if (!layout) {
@@ -37,9 +46,7 @@ export const toast = (props: Omit<TequilaToastProps, 'id'>) => {
 
   const newToast: TequilaToastProps = {
     id: 'toast-' + Date.now(),
-    type: props.type || 'default',
-    closeIcon: props.closeIcon ?? true,
-    ...props,
+    ...mergeWithDefaults(props),
   };
 
   toastsState.toasts.push(newToast);

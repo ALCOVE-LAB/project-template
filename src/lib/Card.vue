@@ -1,12 +1,27 @@
 <template>
-  <div class="rounded-md @light:bg-black/4 @dark:bg-white/4 flex-col shadow-md p-4" v-bind="$attrs">
+  <div class="card w-full flex-col rounded-md bg-text/5 flex-col p-3 md:p-4" v-bind="$attrs">
+    <!-- Title -->
+    <div class="text-3xl font-bold leading-loose" v-if="title && !titleSlot">{{ title }}</div>
     <slot name="title"></slot>
-    <slot></slot>
-    <slot name="bottom"></slot>
+
+    <!-- Content -->
+    <slot>
+      {{ content }}
+    </slot>
+
+    <!-- Bottom -->
+    <div class="text-sm" v-if="bottom && !bottomSlot">{{ bottom }}</div>
+    <slot name="bottom">
+      {{ bottom }}
+    </slot>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  withDefaults(defineProps<{ title?: string; content?: string; bottom?: string }>(), {});
+
+  const { title: titleSlot, bottom: bottomSlot } = useSlots();
+</script>
 
 <style lang="less" scoped></style>
 

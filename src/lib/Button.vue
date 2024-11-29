@@ -1,24 +1,15 @@
 <template>
   <button
-    class="btn"
-    :class="{
-      'btn-secondary': secondary,
-      'btn-inverted': inverted,
-      'btn-info': info,
-      'btn-warning': warning,
-      'btn-success': success,
-      'btn-error': error,
-
-      'btn-outline': outline,
-      'btn-round': rounded,
-
-      'btn-xs': size === 'xs',
-      'btn-sm': size === 'sm',
-      'btn-lg': size === 'lg',
-
-      'btn-loading': loading,
-      'btn-disabled': disabled,
-    }"
+    :class="
+      button({
+        variant,
+        size,
+        type,
+        round,
+        loading,
+        disabled,
+      })
+    "
     @click="
       (evt:any) => {
         if (loading || disabled) {
@@ -54,8 +45,76 @@
 </template>
 
 <script lang="ts" setup>
+  import { cva, VariantProps } from 'class-variance-authority';
   import { LoaderCircle } from 'lucide-vue-next';
   import { FunctionalComponent } from 'vue';
+
+  const button = cva('btn', {
+    variants: {
+      variant: {
+        default: 'btn-default',
+        secondary: 'bg-secondary',
+        inverted: 'bg-inverted',
+        outline: 'border-1 border-solid !border-[currentColor] !bg-transparent',
+        text: 'border-transparent bg-transparent text-btnText',
+      },
+      type: {
+        primary: '',
+        info: 'btn-info',
+        warning: 'btn-warning',
+        success: 'btn-success',
+        error: 'btn-error',
+      },
+      size: {
+        xs: 'btn-xs',
+        sm: 'btn-sm',
+        md: 'btn-md',
+        lg: 'btn-lg',
+      },
+      loading: {
+        true: 'btn-loading',
+      },
+      disabled: {
+        true: 'btn-disabled',
+      },
+      round: {
+        true: 'btn-rounded',
+      },
+    },
+    compoundVariants: [
+      {
+        variant: 'outline',
+        type: 'primary',
+        class: '!text-primary',
+      },
+      {
+        variant: 'outline',
+        type: 'info',
+        class: '!text-info',
+      },
+      {
+        variant: 'outline',
+        type: 'warning',
+        class: '!text-warning',
+      },
+      {
+        variant: 'outline',
+        type: 'error',
+        class: '!text-error',
+      },
+      {
+        variant: 'outline',
+        type: 'success',
+        class: '!text-success',
+      },
+    ],
+    defaultVariants: {
+      variant: 'default',
+      type: 'primary',
+      size: 'sm',
+    },
+  });
+  type buttonProps = VariantProps<typeof button>;
 
   withDefaults(
     defineProps<{
@@ -63,22 +122,18 @@
       prefixIconSize?: number;
       suffixIcon?: FunctionalComponent;
       suffixIconSize?: number;
-      secondary?: boolean;
-      inverted?: boolean;
-      outline?: boolean;
 
-      info?: boolean;
-      warning?: boolean;
-      success?: boolean;
-      error?: boolean;
-      rounded?: boolean;
-
-      loading?: boolean;
-      disabled?: boolean;
-      size?: 'xs' | 'sm' | 'md' | 'lg';
       iconVertical?: boolean;
+
+      variant?: buttonProps['variant'];
+      size?: buttonProps['size'];
+      type?: buttonProps['type'];
+      round?: buttonProps['round'];
+      loading?: buttonProps['loading'];
+      disabled?: buttonProps['disabled'];
     }>(),
     {
+      variant: 'default',
       size: 'md',
       iconVertical: false,
       prefixIconSize: 18,
@@ -95,16 +150,20 @@
   }
 
   .btn {
-    @apply cursor-pointer bg-primary hover:opacity-90 transition-all;
-    @apply rounded-2 text-white font-semibold relative;
-    @apply overflow-hidden border-1 border-solid border-transparent;
-    @apply px-4 text-base min-h-10;
+    @apply cursor-pointer hover:opacity-90 transition-all;
+    @apply rounded-7 relative font-medium text-18px;
+    @apply overflow-hidden;
+    @apply px-4 min-h-14;
     @apply active:scale-95;
 
     &.btn-outline {
-      @apply text-primary;
+      @apply text-btn-background;
       .btn-outline-base;
     }
+  }
+
+  .btn-default {
+    @apply bg-btn-background text-btn-text;
   }
 
   .btn-secondary {
@@ -125,54 +184,21 @@
     }
   }
 
-  // status
-  .btn-warning {
-    @apply bg-warning border-transparent;
-
-    &.btn-outline {
-      .btn-outline-base;
-      @apply text-warning;
-    }
-  }
-
-  .btn-info {
-    @apply bg-info border-transparent;
-
-    &.btn-outline {
-      .btn-outline-base;
-      @apply text-info;
-    }
-  }
-
-  .btn-success {
-    @apply bg-success border-transparent;
-
-    &.btn-outline {
-      .btn-outline-base;
-      @apply text-success;
-    }
-  }
-
-  .btn-error {
-    @apply bg-error border-transparent;
-
-    &.btn-outline {
-      .btn-outline-base;
-      @apply text-error;
-    }
-  }
-
   // size
   .btn-xs {
-    @apply px-2 text-xs min-h-6;
+    @apply px-3 text-xs min-h-6;
   }
 
   .btn-sm {
-    @apply px-3 text-sm min-h-8;
+    @apply px-4 text-sm min-h-8;
+  }
+
+  .btn-md {
+    @apply px-5 text-base min-h-10;
   }
 
   .btn-lg {
-    @apply px-6 text-lg min-h-12;
+    @apply px-6 text-lg min-h-16;
   }
 
   .btn,

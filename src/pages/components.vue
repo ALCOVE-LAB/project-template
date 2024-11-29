@@ -1,12 +1,10 @@
 <template>
   <div
-    class="mx-auto flex-col gap-2 max-w-full w-full min-h-200vh"
+    class="mx-auto flex-col gap-2 max-w-full w-full min-h-200vh pt-20"
     :style="{
       background: `url(https://plus.unsplash.com/premium_photo-1729851529049-09abc2b27fa0?q=80&w=4140&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) center/cover no-repeat`,
     }"
   >
-    <span>1</span>
-    <span>1</span>
     <Button
       class="w-fit"
       @click="
@@ -122,12 +120,15 @@
     </Button>
 
     <Button class="w-fit" @click="waitForClose">A Toast And close</Button>
+
+    <ThemeSwitcher />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { removeToast, toast } from '@/components/Toast';
   import Button from '@/lib/Button.vue';
+  import ThemeSwitcher from '@/lib/ThemeSwitcher.vue';
 
   const count = ref(0);
   const actionButton = h(

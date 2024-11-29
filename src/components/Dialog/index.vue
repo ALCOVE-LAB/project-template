@@ -8,7 +8,7 @@
       @click="emits('update:visible', false)"
     >
       <div
-        class="bg-white rounded-4 p-4 translate-y-40 transition-all max-w-full max-h-80vh overflow-y-auto"
+        class="bg-background rounded-4 p-4 translate-y-40 transition-all max-w-full max-h-80vh overflow-y-auto"
         :class="{
           '!translate-y-0': props.visible,
         }"

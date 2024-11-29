@@ -8,6 +8,7 @@ import {
   presetWind,
   transformerDirectives,
 } from 'unocss';
+import presetTheme from 'unocss-preset-theme';
 
 export default defineConfig({
   presets: [
@@ -15,6 +16,32 @@ export default defineConfig({
 
     presetAttributify(),
     presetWind(),
+    presetTheme({
+      theme: {
+        dark: {
+          colors: {
+            primary: '#ffffff',
+            text: '#ffffff',
+            background: '#000000',
+            btn: {
+              background: '#ff0000',
+              text: '#000000',
+            },
+          },
+        },
+        light: {
+          colors: {
+            primary: '#000000',
+            text: '#000000',
+            background: '#ffffff',
+            btn: {
+              background: '#ff0000',
+              text: '#ffffff',
+            },
+          },
+        },
+      },
+    }),
     presetWebFonts({
       provider: 'google',
       fonts: {
